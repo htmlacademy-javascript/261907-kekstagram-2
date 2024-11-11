@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Елена Есина](https://up.htmlacademy.ru/javascript-individual/2/user/261907).
-* Наставник: `Неизвестно`.
+* Наставник: [Никита Сигов](https://up.htmlacademy.ru/javascript-individual/2/user/17860).
 
 ---
 
