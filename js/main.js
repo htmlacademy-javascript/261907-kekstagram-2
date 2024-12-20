@@ -1,3 +1,1 @@
-import {createPhotoDescriptions} from './data';
-
-createPhotoDescriptions();
+import './render-photos';
