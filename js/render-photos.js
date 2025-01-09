@@ -1,6 +1,5 @@
-import {createPhotoDescriptions} from './data';
+import {initPopup} from './popup';
 
-const photoData = createPhotoDescriptions();
 const photoContainer = document.querySelector('.pictures');
 
 const photoTemplate = document.querySelector('#picture')
@@ -9,15 +8,21 @@ const photoTemplate = document.querySelector('#picture')
 
 const photoContainerFragment = document.createDocumentFragment();
 
-photoData.forEach((it) => {
-  const photo = photoTemplate.cloneNode(true);
-  const photoImage = photo.querySelector('.picture__img');
+const renderPhotos = (photoData) => {
+  photoData.forEach((it) => {
+    const photo = photoTemplate.cloneNode(true);
+    const photoImage = photo.querySelector('.picture__img');
 
-  photoImage.src = it.url;
-  photoImage.alt = it.description;
-  photo.querySelector('.picture__likes').textContent = it.likes;
-  photo.querySelector('.picture__comments').textContent = it.comments.length;
-  photoContainerFragment.append(photo);
-});
+    photo.dataset.id = it.id;
+    photoImage.src = it.url;
+    photoImage.alt = it.description;
+    photo.querySelector('.picture__likes').textContent = it.likes;
+    photo.querySelector('.picture__comments').textContent = it.comments.length;
+    photoContainerFragment.append(photo);
+    initPopup(it, photo);
+  });
 
-photoContainer.append(photoContainerFragment);
+  photoContainer.append(photoContainerFragment);
+};
+
+export {renderPhotos};
