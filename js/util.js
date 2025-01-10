@@ -17,8 +17,11 @@ const getRandomIntegerInPositiveRange = (x, y) => {
 
 const getRandomArrayElement = (array) => array[getRandomIntegerInPositiveRange(0, array.length - 1)];
 
+const isEscape = (evt) => evt.key === 'Escape';
+
 export {
   createIdGenerator,
   getRandomIntegerInPositiveRange,
-  getRandomArrayElement
+  getRandomArrayElement,
+  isEscape
 };
