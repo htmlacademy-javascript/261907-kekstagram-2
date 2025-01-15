@@ -1,4 +1,4 @@
-import {initPopup} from './popup';
+import {makePhotoClickHandler} from './popup.js';
 
 const photoContainer = document.querySelector('.pictures');
 
@@ -19,10 +19,10 @@ const renderPhotos = (photoData) => {
     photo.querySelector('.picture__likes').textContent = it.likes;
     photo.querySelector('.picture__comments').textContent = it.comments.length;
     photoContainerFragment.append(photo);
-    initPopup(it, photo);
   });
 
   photoContainer.append(photoContainerFragment);
+  photoContainer.addEventListener('click', makePhotoClickHandler(photoData));
 };
 
 export {renderPhotos};
