@@ -1,3 +1,21 @@
+const chooseUnit = (number, single, firstPlural, secondPlural) => {
+  if (number > 4 && number < 21) {
+    return secondPlural;
+  }
+  const excess = number % 10;
+
+  switch (excess) {
+    case 1:
+      return single;
+    case 2:
+    case 3:
+    case 4:
+      return firstPlural;
+    default:
+      return secondPlural;
+  }
+};
+
 const createIdGenerator = () => {
   let id = 0;
 
@@ -19,21 +37,9 @@ const getRandomArrayElement = (array) => array[getRandomIntegerInPositiveRange(0
 
 const isEscape = (evt) => evt.key === 'Escape';
 
-const chooseUnit = (number, single, firstPlural, secondPlural) => {
-  if (number > 4 && number < 21) {
-    return secondPlural;
-  }
-  const excess = number % 10;
-
-  switch (excess) {
-    case 1:
-      return single;
-    case 2:
-    case 3:
-    case 4:
-      return firstPlural;
-    default:
-      return secondPlural;
+const ignoreEscapeKeydown = (evt) => {
+  if (isEscape) {
+    evt.stopPropagation();
   }
 };
 
@@ -42,5 +48,6 @@ export {
   createIdGenerator,
   getRandomIntegerInPositiveRange,
   getRandomArrayElement,
+  ignoreEscapeKeydown,
   isEscape
 };

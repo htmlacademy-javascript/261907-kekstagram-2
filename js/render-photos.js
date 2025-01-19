@@ -1,4 +1,4 @@
-import {makePhotoClickHandler} from './popup.js';
+import {makePhotoClickHandler} from './big-picture.js';
 
 const photoContainer = document.querySelector('.pictures');
 
