@@ -1,12 +1,23 @@
 import {chooseUnit, isEscape} from './util.js';
 
-const INITIAL_SHOWN_COMMENTS_COUNT = 5;
+const COMMENTS_PORTION_COUNT = 5;
 
 const popup = document.querySelector('.big-picture');
 const closeButton = popup.querySelector('.big-picture__cancel');
 const commentsCount = popup.querySelector('.social__comment-count');
 const commentsList = popup.querySelector('.social__comments');
 const commentsLoader = popup.querySelector('.social__comments-loader');
+let currentPhotoComments = null;
+
+const renderCommentsCount = (count, extended) => extended ?
+  `<span class="social__comment-shown-count">${COMMENTS_PORTION_COUNT}</span>
+  из
+  <span class="social__comment-total-count">${count}</span>
+  ${chooseUnit(count, 'комментария', 'комментариев', 'комментариев')}
+  ` :
+  `<span class="social__comment-shown-count">${count}</span>
+  ${chooseUnit(count, 'комментарий', 'комментария', 'комментариев')}
+  `;
 
 const renderComment = ({avatar, name, message}, i) => `
   <li class="social__comment${i > 4 ? '  hidden' : ''}">
@@ -19,6 +30,8 @@ const renderComment = ({avatar, name, message}, i) => `
   </li>
 `;
 
+const renderCommentsPortion = (comments) => comments.map(renderComment).join('');
+
 const fillPopup = ({url, description, likes, comments}) => {
   const popupImage = popup.querySelector('.big-picture__img img');
 
@@ -26,24 +39,14 @@ const fillPopup = ({url, description, likes, comments}) => {
   popupImage.alt = description;
   popup.querySelector('.social__caption').textContent = description;
   popup.querySelector('.likes-count').textContent = likes;
-  commentsList.innerHTML = comments.map(renderComment).join('');
-  commentsLoader.dataset.portion = 1;
+  currentPhotoComments = {comments, portion: 1};
+  commentsList.innerHTML = renderCommentsPortion(currentPhotoComments.comments.slice(0, COMMENTS_PORTION_COUNT));
 
   if (comments.length > 5) {
-    commentsCount.innerHTML = `
-      <span class="social__comment-shown-count">${INITIAL_SHOWN_COMMENTS_COUNT}</span>
-      из
-      <span class="social__comment-total-count">${comments.length}</span>
-      ${chooseUnit(comments.length, 'комментария', 'комментариев', 'комментариев')}
-    `;
-
+    commentsCount.innerHTML = renderCommentsCount(comments.length, true);
     commentsLoader.classList.remove('hidden');
   } else {
-    commentsCount.innerHTML = `
-      <span class="social__comment-shown-count">${comments.length}</span>
-      ${chooseUnit(comments.length, 'комментарий', 'комментария', 'комментариев')}
-    `;
-
+    commentsCount.innerHTML = renderCommentsCount(comments.length);
     commentsLoader.classList.add('hidden');
   }
 };
@@ -56,7 +59,7 @@ const onDocumentKeydown = (evt) => {
 };
 
 function openPopup (photoData) {
-  fillPopup(popup, photoData);
+  fillPopup(photoData);
   popup.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
@@ -90,20 +93,15 @@ const makePhotoClickHandler = (photoData) => (evt) => {
 commentsLoader.addEventListener('click', (evt) => {
   evt.preventDefault();
 
-  let commentPortion = Number(commentsLoader.dataset.portion);
+  const shownCommentsCount = COMMENTS_PORTION_COUNT * currentPhotoComments.portion;
+  const requestedCommentsCount = COMMENTS_PORTION_COUNT * ++currentPhotoComments.portion;
 
-  const shownCommentsCount = INITIAL_SHOWN_COMMENTS_COUNT * commentPortion;
-  const requestedCommentsCount = INITIAL_SHOWN_COMMENTS_COUNT * ++commentPortion;
-  const comments = commentsList.children;
+  commentsList.insertAdjacentHTML('beforeend', renderCommentsPortion(currentPhotoComments.comments.slice(shownCommentsCount, requestedCommentsCount)));
 
-  for (let i = shownCommentsCount; i < requestedCommentsCount; i++) {
-    comments[i]?.classList.remove('hidden');
-  }
+  commentsCount.querySelector('.social__comment-shown-count').textContent = currentPhotoComments.comments.length < requestedCommentsCount ? currentPhotoComments.comments.length : requestedCommentsCount;
 
-  commentsCount.querySelector('.social__comment-shown-count').textContent = comments.length < requestedCommentsCount ? comments.length : requestedCommentsCount;
-  commentsLoader.dataset.portion = commentPortion;
-
-  if (comments.length < requestedCommentsCount) {
+  if (currentPhotoComments.comments.length < requestedCommentsCount) {
+    commentsCount.innerHTML = renderCommentsCount(currentPhotoComments.comments.length);
     commentsLoader.classList.add('hidden');
   }
 });
