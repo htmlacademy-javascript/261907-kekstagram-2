@@ -7,11 +7,7 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-function openPopup (popup, cb, data) {
-  if (data && cb) {
-    cb(data);
-  }
-
+function openPopup (popup) {
   popup.classList.remove('hidden');
   popup.classList.add('opened-modal');
   document.body.classList.add('modal-open');

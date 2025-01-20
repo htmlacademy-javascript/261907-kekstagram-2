@@ -67,7 +67,8 @@ const makePhotoClickHandler = (photoData) => (evt) => {
   const requestedPhotoData = photoData.find((it) => it.id === photoId);
 
   if (requestedPhotoData) {
-    openPopup(bigPicture, fillbigPicture, requestedPhotoData);
+    fillbigPicture(requestedPhotoData);
+    openPopup(bigPicture);
   }
 };
 
