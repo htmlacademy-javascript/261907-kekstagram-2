@@ -1,10 +1,6 @@
+import {Filters, Steps} from './const.js';
 import {closePopup, openPopup} from './popup.js';
 import {ignoreEscapeKeydown} from './util.js';
-
-const SCALE_STEP = 25;
-const FIRST_STEP = 1;
-const LAST_STEP = 4;
-const DEFAULT_SCALE = 4;
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadInput = uploadForm.querySelector('.img-upload__input');
@@ -13,12 +9,14 @@ const closeButton = uploadPopup.querySelector('.img-upload__cancel');
 const previewScale = uploadPopup.querySelector('.img-upload__scale');
 const previewScaleInput = previewScale.querySelector('.scale__control--value');
 const uploadPreview = uploadPopup.querySelector('.img-upload__preview img');
+const effectLevelContainer = uploadPopup.querySelector('.img-upload__effect-level');
+const effectLevelSlider = effectLevelContainer.querySelector('.effect-level__slider');
 const effectsList = uploadPopup.querySelector('.effects__list');
 const effects = Array.from(effectsList.querySelectorAll('.effects__preview'));
 const hashtagsField = uploadPopup.querySelector('.text__hashtags');
 const commentField = uploadPopup.querySelector('.text__description');
 const submitButton = uploadPopup.querySelector('.img-upload__submit');
-let currentScale = DEFAULT_SCALE;
+let currentScale = Steps.DEFAULT;
 
 const fillUploadPopup = () => {
   const imageSrc = URL.createObjectURL(uploadInput.files[0]);
@@ -28,6 +26,13 @@ const fillUploadPopup = () => {
   effects.forEach((it) => {
     it.style.backgroundImage = `url('${imageSrc}')`;
   });
+};
+
+const resetFilter = () => {
+  effectsList.querySelector('.effects__radio[value="none"]').checked = true;
+  uploadPreview.style.filter = '';
+  uploadPreview.dataset.effect = '';
+  effectLevelContainer.classList.add('hidden');
 };
 
 uploadInput.addEventListener('change', () => {
@@ -48,14 +53,65 @@ previewScale.addEventListener('click', (evt) => {
 
   currentScale += scaleRequest;
 
-  if (currentScale > LAST_STEP) {
-    currentScale = LAST_STEP;
-  } else if (currentScale < FIRST_STEP) {
-    currentScale = FIRST_STEP;
+  if (currentScale > Steps.LAST) {
+    currentScale = Steps.LAST;
+  } else if (currentScale < Steps.FIRST) {
+    currentScale = Steps.FIRST;
   }
 
-  previewScaleInput.value = `${currentScale * SCALE_STEP}%`;
-  uploadPreview.style.transform = `scale(${currentScale / LAST_STEP})`;
+  previewScaleInput.value = `${currentScale * Steps.VALUE}%`;
+  uploadPreview.style.transform = `scale(${currentScale / Steps.LAST})`;
+});
+
+noUiSlider.create(effectLevelSlider, {
+  ...Filters.CHROME.noUiSliderSettings,
+  connect: 'lower',
+  format: {
+    to: (value) => {
+      const currentEffect = effectsList.querySelector('.effects__radio:checked').value;
+
+      switch (currentEffect) {
+        case 'chrome':
+        case 'sepia':
+        case 'heat':
+          return value.toFixed(1);
+        case 'marvin':
+          return `${value}%`;
+        case 'phobos':
+          return `${value.toFixed(1)}px`;
+      }
+    },
+    from: (value) => parseFloat(value)
+  }
+});
+
+effectLevelSlider.noUiSlider.on('update', () => {
+  const currentEffect = effectsList.querySelector('.effects__radio:checked').value.toUpperCase();
+
+  if (currentEffect === 'NONE') {
+    resetFilter();
+
+    return;
+  }
+
+  const currentLevel = effectLevelSlider.noUiSlider.get();
+
+  uploadPreview.style.filter = `${Filters[currentEffect].name}(${currentLevel})`;
+});
+
+effectsList.addEventListener('change', (evt) => {
+  const currentEffect = evt.target.value.toUpperCase();
+
+  if (currentEffect === 'NONE') {
+    resetFilter();
+
+    return;
+  }
+
+  uploadPreview.style.filter = `${Filters[currentEffect].name}(${Filters[currentEffect].level})`;
+  uploadPreview.dataset.effect = currentEffect;
+  effectLevelContainer.classList.remove('hidden');
+  effectLevelSlider.noUiSlider.updateOptions(Filters[currentEffect].noUiSliderSettings);
 });
 
 const pristine = new Pristine(uploadForm, {
