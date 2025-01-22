@@ -1,7 +1,12 @@
-import {createPhotoDescriptions} from './data.js';
 import {renderPhotos} from './render-photos.js';
 import './upload-form.js';
+import {getData} from './api.js';
+import {renderError} from './error.js';
 
-const photoData = createPhotoDescriptions();
-
-renderPhotos(photoData);
+getData()
+  .then((photoData) => {
+    renderPhotos(photoData);
+  })
+  .catch(() => {
+    renderError();
+  });
