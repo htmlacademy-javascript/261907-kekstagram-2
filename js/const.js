@@ -1,3 +1,17 @@
+const URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
+
+const Routes = {
+  GET_DATA: '/data',
+  SEND_DATA: ''
+};
+
+const Methods = {
+  GET: 'GET',
+  POST: 'POST'
+};
+
+const ERROR_SHOW_TIME = 5000;
+
 const Steps = {
   VALUE: 25,
   FIRST: 1,
@@ -69,6 +83,10 @@ const Filters = {
 };
 
 export {
+  ERROR_SHOW_TIME,
+  Filters,
+  Methods,
+  Routes,
   Steps,
-  Filters
+  URL
 };
