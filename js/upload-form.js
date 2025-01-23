@@ -10,6 +10,7 @@ const previewScale = uploadPopup.querySelector('.img-upload__scale');
 const previewScaleInput = previewScale.querySelector('.scale__control--value');
 const uploadPreview = uploadPopup.querySelector('.img-upload__preview img');
 const effectLevelContainer = uploadPopup.querySelector('.img-upload__effect-level');
+const effectLevelInput = effectLevelContainer.querySelector('.effect-level__value');
 const effectLevelSlider = effectLevelContainer.querySelector('.effect-level__slider');
 const effectsList = uploadPopup.querySelector('.effects__list');
 const effects = Array.from(effectsList.querySelectorAll('.effects__preview'));
@@ -34,6 +35,13 @@ const resetFilter = () => {
   uploadPreview.dataset.effect = '';
   effectLevelContainer.classList.add('hidden');
 };
+
+const pristine = new Pristine(uploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorClass: 'img-upload__field-wrapper--error',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextTag: 'div'
+});
 
 uploadInput.addEventListener('change', () => {
   openPopup(uploadPopup);
@@ -97,6 +105,7 @@ effectLevelSlider.noUiSlider.on('update', () => {
   const currentLevel = effectLevelSlider.noUiSlider.get();
 
   uploadPreview.style.filter = `${Filters[currentEffect].name}(${currentLevel})`;
+  effectLevelInput.value = parseFloat(currentLevel);
 });
 
 effectsList.addEventListener('change', (evt) => {
@@ -114,13 +123,6 @@ effectsList.addEventListener('change', (evt) => {
   effectLevelSlider.noUiSlider.updateOptions(Filters[currentEffect].noUiSliderSettings);
 });
 
-const pristine = new Pristine(uploadForm, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'div',
-  errorTextClass: 'img-upload__field-wrapper--error'
-});
-
 pristine.addValidator(hashtagsField, (value) => {
   const hashtags = value.trim().split(' ');
 
@@ -135,6 +137,8 @@ pristine.addValidator(hashtagsField, (value) => {
 
   return !value || hashtags.length === hashtagsSet.size;
 }, 'Хэштеги повторяются');
+
+pristine.addValidator(commentField, (value) => !value || value.length <= 140, 'Превышено количество символов');
 
 hashtagsField.addEventListener('keydown', ignoreEscapeKeydown);
 commentField.addEventListener('keydown', ignoreEscapeKeydown);
