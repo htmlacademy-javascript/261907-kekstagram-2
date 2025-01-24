@@ -1,4 +1,6 @@
-import {makePhotoClickHandler} from './big-picture.js';
+import {openPhoto} from './big-picture.js';
+
+let photoData = null;
 
 const photoContainer = document.querySelector('.pictures');
 
@@ -8,7 +10,33 @@ const photoTemplate = document.querySelector('#picture')
 
 const photoContainerFragment = document.createDocumentFragment();
 
-const renderPhotos = (photoData) => {
+const onPhotoClick = (evt) => {
+  const photo = evt.target.closest('.picture');
+
+  if (!photo || !photoData) {
+    return;
+  }
+
+  evt.preventDefault();
+
+  const photoId = Number(photo.dataset.id);
+  const requestedPhotoData = photoData.find((it) => it.id === photoId);
+
+  if (requestedPhotoData) {
+    openPhoto(requestedPhotoData);
+  }
+};
+
+const clearContainer = () => {
+  Array.from(photoContainer.querySelectorAll('.picture')).forEach((it) => {
+    it.remove();
+  });
+};
+
+const renderPhotos = (data) => {
+  clearContainer();
+  photoData = data;
+
   photoData.forEach((it) => {
     const photo = photoTemplate.cloneNode(true);
     const photoImage = photo.querySelector('.picture__img');
@@ -22,7 +50,8 @@ const renderPhotos = (photoData) => {
   });
 
   photoContainer.append(photoContainerFragment);
-  photoContainer.addEventListener('click', makePhotoClickHandler(photoData));
 };
+
+photoContainer.addEventListener('click', onPhotoClick);
 
 export {renderPhotos};

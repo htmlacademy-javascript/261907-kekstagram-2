@@ -26,6 +26,16 @@ const createIdGenerator = () => {
   };
 };
 
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+
+  };
+};
+
 const getRandomIntegerInPositiveRange = (x, y) => {
   const min = Math.ceil(Math.min(Math.abs(x), Math.abs(y)));
   const max = Math.floor(Math.max(Math.abs(x), Math.abs(y)));
@@ -43,11 +53,28 @@ const ignoreEscapeKeydown = (evt) => {
   }
 };
 
+const shuffleArray = (array, length = array.length) => {
+  const sourceArray = array.slice();
+  const resultArray = [];
+  let requiredLength = length;
+
+  while (sourceArray.length && requiredLength > 0) {
+    const randomIndex = getRandomIntegerInPositiveRange(0, sourceArray.length - 1);
+
+    resultArray.push(sourceArray.splice(randomIndex - 1, 1)[0]);
+    requiredLength--;
+  }
+
+  return resultArray;
+};
+
 export {
   chooseUnit,
   createIdGenerator,
+  debounce,
   getRandomIntegerInPositiveRange,
   getRandomArrayElement,
   ignoreEscapeKeydown,
-  isEscape
+  isEscape,
+  shuffleArray
 };

@@ -1,4 +1,4 @@
-import {Methods, Routes, URL} from './const';
+import {URL, Methods, Routes} from './const';
 
 const load = (route, method = Methods.GET, body = null) => fetch(
   `${URL}${route}`,
