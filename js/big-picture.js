@@ -54,22 +54,9 @@ const fillbigPicture = ({url, description, likes, comments}) => {
 
 closeButton.addEventListener('click', closePopup);
 
-const makePhotoClickHandler = (photoData) => (evt) => {
-  const photo = evt.target.closest('.picture');
-
-  if (!photo) {
-    return;
-  }
-
-  evt.preventDefault();
-
-  const photoId = Number(photo.dataset.id);
-  const requestedPhotoData = photoData.find((it) => it.id === photoId);
-
-  if (requestedPhotoData) {
-    fillbigPicture(requestedPhotoData);
-    openPopup(bigPicture);
-  }
+const openPhoto = (photoData) => {
+  fillbigPicture(photoData);
+  openPopup(bigPicture);
 };
 
 commentsLoader.addEventListener('click', (evt) => {
@@ -88,4 +75,4 @@ commentsLoader.addEventListener('click', (evt) => {
   }
 });
 
-export {makePhotoClickHandler};
+export {openPhoto};

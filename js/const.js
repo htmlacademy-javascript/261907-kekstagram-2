@@ -12,6 +12,16 @@ const Methods = {
 
 const ERROR_SHOW_TIME = 5000;
 
+const SortControls = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
+};
+
+const DEBOUNCE_DELAY = 500;
+
+const RANDOM_PHOTOS_COUNT = 10;
+
 const Steps = {
   VALUE: 25,
   FIRST: 1,
@@ -83,10 +93,13 @@ const Filters = {
 };
 
 export {
+  DEBOUNCE_DELAY,
   ERROR_SHOW_TIME,
+  RANDOM_PHOTOS_COUNT,
+  URL,
   Filters,
   Methods,
   Routes,
-  Steps,
-  URL
+  SortControls,
+  Steps
 };
