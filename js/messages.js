@@ -13,12 +13,13 @@ const createElementFromTemplate = (id) => {
 
 const removeMessage = (evt) => {
   evt.preventDefault();
+  evt.stopPropagation();
 
   const message = document.querySelector('.message');
 
   message.remove();
   document.removeEventListener('click', onDocumentClick);
-  document.removeEventListener('keydown', onDocumentKeydown);
+  document.body.removeEventListener('keydown', onBodyKeydown);
 };
 
 function onDocumentClick (evt) {
@@ -29,7 +30,7 @@ function onDocumentClick (evt) {
   removeMessage(evt);
 }
 
-function onDocumentKeydown (evt) {
+function onBodyKeydown (evt) {
   if (isEscape(evt)) {
     removeMessage(evt);
   }
@@ -48,7 +49,7 @@ const createMessageForUser = (id) => {
     });
 
     document.addEventListener('click', onDocumentClick);
-    document.addEventListener('keydown', onDocumentKeydown);
+    document.body.addEventListener('keydown', onBodyKeydown);
   };
 };
 
@@ -57,9 +58,8 @@ const dataErrorElement = createElementFromTemplate('data-error');
 const renderDataError = () => {
   document.body.append(dataErrorElement);
 
-  const dataErrorTimeout = setTimeout(() => {
+  setTimeout(() => {
     dataErrorElement.remove();
-    clearTimeout(dataErrorTimeout);
   }, ERROR_SHOW_TIME);
 };
 

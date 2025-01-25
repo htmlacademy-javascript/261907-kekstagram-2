@@ -2,7 +2,7 @@ const URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
 const Routes = {
   GET_DATA: '/data',
-  SEND_DATA: ''
+  SEND_DATA: '/1'
 };
 
 const Methods = {
@@ -21,6 +21,8 @@ const SortControls = {
 const DEBOUNCE_DELAY = 500;
 
 const RANDOM_PHOTOS_COUNT = 10;
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const Steps = {
   VALUE: 25,
@@ -94,6 +96,7 @@ const Filters = {
 
 export {
   DEBOUNCE_DELAY,
+  FILE_TYPES,
   ERROR_SHOW_TIME,
   RANDOM_PHOTOS_COUNT,
   URL,
