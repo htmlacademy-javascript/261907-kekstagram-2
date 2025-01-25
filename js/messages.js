@@ -23,7 +23,7 @@ const removeMessage = (evt) => {
 };
 
 function onDocumentClick (evt) {
-  if (evt.target.closest('.messages > div')) {
+  if (evt.target.closest('[class*="__inner"]')) {
     return;
   }
 

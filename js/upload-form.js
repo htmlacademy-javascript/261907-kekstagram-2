@@ -1,8 +1,7 @@
 import {FILE_TYPES, Steps} from './const.js';
 import {closePopup, openPopup, resetForm} from './popup.js';
 import {initEffects} from './effects.js';
-import {addValidators} from './validators.js';
-import {ignoreEscapeKeydown} from './util.js';
+import {pristine} from './validation.js';
 import {sendData} from './api.js';
 import {renderError, renderSuccess} from './messages.js';
 
@@ -16,17 +15,13 @@ const uploadPreview = uploadPopup.querySelector('.img-upload__preview img');
 const effectLevelContainer = uploadPopup.querySelector('.img-upload__effect-level');
 const effectsList = uploadPopup.querySelector('.effects__list');
 const effects = Array.from(effectsList.querySelectorAll('.effects__preview'));
-const hashtagsField = uploadPopup.querySelector('.text__hashtags');
-const commentField = uploadPopup.querySelector('.text__description');
 const submitButton = uploadPopup.querySelector('.img-upload__submit');
 let currentScale = Steps.DEFAULT;
-
-const pristine = new Pristine(uploadForm, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'div',
-  errorTextClass: 'img-upload__field-wrapper--error'
-});
+//   classTo: 'img-upload__field-wrapper',
+//   errorTextParent: 'img-upload__field-wrapper',
+//   errorTextTag: 'div',
+//   errorTextClass: 'img-upload__field-wrapper--error'
+// });
 
 const fillUploadPopup = (imageSrc) => {
   uploadPreview.src = imageSrc;
@@ -73,9 +68,6 @@ previewScale.addEventListener('click', (evt) => {
 });
 
 initEffects(effectLevelContainer, uploadPreview, effectsList);
-addValidators(pristine, hashtagsField, commentField);
-hashtagsField.addEventListener('keydown', ignoreEscapeKeydown);
-commentField.addEventListener('keydown', ignoreEscapeKeydown);
 
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();

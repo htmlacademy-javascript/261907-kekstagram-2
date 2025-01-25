@@ -1,11 +1,13 @@
 import {isEscape} from './util.js';
 import {resetFilter} from './effects.js';
+import {pristine} from './validation.js';
 
 const resetForm = (form) => {
   const preview = form.querySelector('.img-upload__preview img');
   const container = form.querySelector('.img-upload__effect-level');
   const list = form.querySelector('.effects__list');
 
+  pristine.reset();
   form.reset();
   preview.style.transform = '';
   resetFilter(container, preview, list);
