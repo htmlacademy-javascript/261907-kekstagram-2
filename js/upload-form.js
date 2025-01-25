@@ -17,11 +17,6 @@ const effectsList = uploadPopup.querySelector('.effects__list');
 const effects = Array.from(effectsList.querySelectorAll('.effects__preview'));
 const submitButton = uploadPopup.querySelector('.img-upload__submit');
 let currentScale = Steps.DEFAULT;
-//   classTo: 'img-upload__field-wrapper',
-//   errorTextParent: 'img-upload__field-wrapper',
-//   errorTextTag: 'div',
-//   errorTextClass: 'img-upload__field-wrapper--error'
-// });
 
 const fillUploadPopup = (imageSrc) => {
   uploadPreview.src = imageSrc;
