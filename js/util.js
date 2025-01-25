@@ -1,3 +1,5 @@
+const beautifyValue = (value) => value.trim().replace(/ {2,}/g, ' ');
+
 const chooseUnit = (number, single, firstPlural, secondPlural) => {
   if (number > 4 && number < 21) {
     return secondPlural;
@@ -69,6 +71,7 @@ const shuffleArray = (array, length = array.length) => {
 };
 
 export {
+  beautifyValue,
   chooseUnit,
   createIdGenerator,
   debounce,

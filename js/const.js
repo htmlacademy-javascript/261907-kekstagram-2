@@ -1,8 +1,8 @@
-const URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
+const URL = 'https://32.javascript.htmlacademy.pro/kekstagram';
 
 const Routes = {
   GET_DATA: '/data',
-  SEND_DATA: ''
+  SEND_DATA: '/'
 };
 
 const Methods = {
