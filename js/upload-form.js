@@ -1,4 +1,4 @@
-import {Steps} from './const.js';
+import {FILE_TYPES, Steps} from './const.js';
 import {closePopup, openPopup, resetForm} from './popup.js';
 import {initEffects} from './effects.js';
 import {addValidators} from './validators.js';
@@ -28,9 +28,7 @@ const pristine = new Pristine(uploadForm, {
   errorTextClass: 'img-upload__field-wrapper--error'
 });
 
-const fillUploadPopup = () => {
-  const imageSrc = URL.createObjectURL(uploadInput.files[0]);
-
+const fillUploadPopup = (imageSrc) => {
   uploadPreview.src = imageSrc;
 
   effects.forEach((it) => {
@@ -39,8 +37,16 @@ const fillUploadPopup = () => {
 };
 
 uploadInput.addEventListener('change', () => {
-  openPopup(uploadPopup);
-  fillUploadPopup();
+  const file = uploadInput.files[0];
+  const fileName = file.name.toLowerCase();
+  const isTypeAccepted = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (isTypeAccepted) {
+    const imageSrc = URL.createObjectURL(uploadInput.files[0]);
+
+    openPopup(uploadPopup);
+    fillUploadPopup(imageSrc);
+  }
 });
 
 closeButton.addEventListener('click', closePopup);

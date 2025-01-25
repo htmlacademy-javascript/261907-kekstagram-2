@@ -22,6 +22,8 @@ const DEBOUNCE_DELAY = 500;
 
 const RANDOM_PHOTOS_COUNT = 10;
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+
 const Steps = {
   VALUE: 25,
   FIRST: 1,
@@ -94,6 +96,7 @@ const Filters = {
 
 export {
   DEBOUNCE_DELAY,
+  FILE_TYPES,
   ERROR_SHOW_TIME,
   RANDOM_PHOTOS_COUNT,
   URL,
