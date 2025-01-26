@@ -18,15 +18,7 @@ const chooseUnit = (number, single, firstPlural, secondPlural) => {
   }
 };
 
-const createIdGenerator = () => {
-  let id = 0;
-
-  return () => {
-    id++;
-
-    return id;
-  };
-};
+const compareProperties = (propertyA, propertyB) => propertyB - propertyA;
 
 const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
@@ -44,8 +36,6 @@ const getRandomIntegerInPositiveRange = (x, y) => {
 
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
-
-const getRandomArrayElement = (array) => array[getRandomIntegerInPositiveRange(0, array.length - 1)];
 
 const isEscape = (evt) => evt.key === 'Escape';
 
@@ -73,10 +63,8 @@ const shuffleArray = (array, length = array.length) => {
 export {
   beautifyValue,
   chooseUnit,
-  createIdGenerator,
+  compareProperties,
   debounce,
-  getRandomIntegerInPositiveRange,
-  getRandomArrayElement,
   ignoreEscapeKeydown,
   isEscape,
   shuffleArray
