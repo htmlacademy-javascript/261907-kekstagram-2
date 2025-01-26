@@ -1,8 +1,9 @@
+import {RANDOM_PHOTOS_COUNT, SortControls} from './const';
+import {compareProperties, shuffleArray} from './util.js';
 import {openPhoto} from './big-picture.js';
 
-let photoData = null;
-
 const photoContainer = document.querySelector('.pictures');
+let photoData = null;
 
 const photoTemplate = document.querySelector('#picture')
   .content
@@ -34,8 +35,22 @@ const clearContainer = () => {
 };
 
 const renderPhotos = (data) => {
+  const filterValue = document.querySelector('.img-filters__button--active').id;
+
+  switch (filterValue) {
+    case SortControls.RANDOM:
+      photoData = shuffleArray(data, RANDOM_PHOTOS_COUNT);
+
+      break;
+    case SortControls.DISCUSSED:
+      photoData = data.slice().sort((photoA, photoB) => compareProperties(photoA.comments.length, photoB.comments.length));
+
+      break;
+    default:
+      photoData = data;
+  }
+
   clearContainer();
-  photoData = data;
 
   photoData.forEach((it) => {
     const photo = photoTemplate.cloneNode(true);
