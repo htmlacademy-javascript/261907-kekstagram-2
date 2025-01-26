@@ -20,10 +20,15 @@ let currentScale = Steps.DEFAULT;
 
 const fillUploadPopup = (imageSrc) => {
   uploadPreview.src = imageSrc;
+  currentScale = Steps.DEFAULT;
 
   effects.forEach((it) => {
     it.style.backgroundImage = `url('${imageSrc}')`;
   });
+};
+
+const onCloseButtonClick = () => {
+  closePopup();
 };
 
 uploadInput.addEventListener('change', () => {
@@ -34,12 +39,12 @@ uploadInput.addEventListener('change', () => {
   if (isTypeAccepted) {
     const imageSrc = URL.createObjectURL(uploadInput.files[0]);
 
-    openPopup(uploadPopup);
     fillUploadPopup(imageSrc);
+    openPopup(uploadPopup);
   }
 });
 
-closeButton.addEventListener('click', closePopup);
+closeButton.addEventListener('click', onCloseButtonClick);
 
 previewScale.addEventListener('click', (evt) => {
   const scaleButton = evt.target.closest('button.scale__control');

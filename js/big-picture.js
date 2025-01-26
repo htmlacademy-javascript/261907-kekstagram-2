@@ -1,3 +1,4 @@
+import {COMMENT_TEMPLATE} from './const.js';
 import {closePopup, openPopup} from './popup.js';
 import {chooseUnit} from './util.js';
 
@@ -16,18 +17,25 @@ const renderCommentsCount = (currentPortion, count) => `<span class="social__com
   ${chooseUnit(count, 'комментария', 'комментариев', 'комментариев')}
 `;
 
-const renderComment = ({avatar, name, message}, i) => `
-  <li class="social__comment${i > 4 ? '  hidden' : ''}">
-    <img
-      class="social__picture"
-      src="${avatar}"
-      alt="${name}"
-      width="35" height="35">
-    <p class="social__text">${message}</p>
-  </li>
-`;
+const renderCommentsPortion = (comments) => {
+  const commentsFragment = document.createDocumentFragment();
 
-const renderCommentsPortion = (comments) => comments.map(renderComment).join('');
+  comments.forEach(({avatar, name, message}) => {
+    const comment = document.createElement('li');
+
+    comment.classList.add('social__comment');
+    comment.insertAdjacentHTML('beforeend', COMMENT_TEMPLATE);
+
+    const commentAvatar = comment.querySelector('.social__picture');
+
+    commentAvatar.src = avatar;
+    commentAvatar.alt = name;
+    comment.querySelector('.social__text').textContent = message;
+    commentsFragment.append(comment);
+  });
+
+  return commentsFragment;
+};
 
 const fillbigPicture = ({url, description, likes, comments}) => {
   const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
@@ -38,7 +46,8 @@ const fillbigPicture = ({url, description, likes, comments}) => {
   bigPicture.querySelector('.likes-count').textContent = likes;
   currentPhotoComments = {comments, portion: 1};
   commentsCount.innerHTML = renderCommentsCount(COMMENTS_PORTION_COUNT, comments.length);
-  commentsList.innerHTML = renderCommentsPortion(currentPhotoComments.comments.slice(0, COMMENTS_PORTION_COUNT));
+  commentsList.innerHTML = '';
+  commentsList.append(renderCommentsPortion(currentPhotoComments.comments.slice(0, COMMENTS_PORTION_COUNT)));
 
   if (comments.length > 5) {
     commentsLoader.classList.remove('hidden');
@@ -47,7 +56,11 @@ const fillbigPicture = ({url, description, likes, comments}) => {
   }
 };
 
-closeButton.addEventListener('click', closePopup);
+const onCloseButtonClick = () => {
+  closePopup();
+};
+
+closeButton.addEventListener('click', onCloseButtonClick);
 
 const openPhoto = (photoData) => {
   fillbigPicture(photoData);
@@ -60,8 +73,7 @@ commentsLoader.addEventListener('click', (evt) => {
   const shownCommentsCount = COMMENTS_PORTION_COUNT * currentPhotoComments.portion;
   const requestedCommentsCount = COMMENTS_PORTION_COUNT * ++currentPhotoComments.portion;
 
-  commentsList.insertAdjacentHTML('beforeend', renderCommentsPortion(currentPhotoComments.comments.slice(shownCommentsCount, requestedCommentsCount)));
-
+  commentsList.append(renderCommentsPortion(currentPhotoComments.comments.slice(shownCommentsCount, requestedCommentsCount)));
   commentsCount.querySelector('.social__comment-shown-count').textContent = currentPhotoComments.comments.length < requestedCommentsCount ? currentPhotoComments.comments.length : requestedCommentsCount;
   commentsCount.innerHTML = renderCommentsCount(requestedCommentsCount, currentPhotoComments.comments.length);
 

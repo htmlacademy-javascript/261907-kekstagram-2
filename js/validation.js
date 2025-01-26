@@ -20,6 +20,10 @@ const onFieldInput = (evt) => {
   }
 };
 
+const onFieldKeydown = (evt) => {
+  ignoreEscapeKeydown(evt);
+};
+
 pristine.addValidator(hashtagsField, (value) => {
   const hashtags = beautifyValue(value).split(' ');
 
@@ -38,7 +42,7 @@ pristine.addValidator(hashtagsField, (value) => {
 pristine.addValidator(commentField, (value) => !value || value.length <= 140, 'Длина комментария больше 140 символов');
 
 uploadForm.addEventListener('input', onFieldInput);
-hashtagsField.addEventListener('keydown', ignoreEscapeKeydown);
-commentField.addEventListener('keydown', ignoreEscapeKeydown);
+hashtagsField.addEventListener('keydown', onFieldKeydown);
+commentField.addEventListener('keydown', onFieldKeydown);
 
 export {pristine};

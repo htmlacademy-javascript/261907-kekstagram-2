@@ -18,9 +18,14 @@ const removeMessage = (evt) => {
   const message = document.querySelector('.message');
 
   message.remove();
+  message.querySelector('[class*="__button"]').removeEventListener('click', onCloseButtonClick);
   document.removeEventListener('click', onDocumentClick);
   document.body.removeEventListener('keydown', onBodyKeydown);
 };
+
+function onCloseButtonClick (evt) {
+  removeMessage(evt);
+}
 
 function onDocumentClick (evt) {
   if (evt.target.closest('[class*="__inner"]')) {
@@ -41,13 +46,7 @@ const createMessageForUser = (id) => {
 
   return () => {
     document.body.append(element);
-
-    element.addEventListener('click', (evt) => {
-      if (evt.target.closest(`.${id}__button`)) {
-        removeMessage(evt);
-      }
-    });
-
+    element.querySelector('[class*="__button"]').addEventListener('click', onCloseButtonClick);
     document.addEventListener('click', onDocumentClick);
     document.body.addEventListener('keydown', onBodyKeydown);
   };

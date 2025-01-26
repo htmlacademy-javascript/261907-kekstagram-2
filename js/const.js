@@ -22,6 +22,15 @@ const DEBOUNCE_DELAY = 500;
 
 const RANDOM_PHOTOS_COUNT = 10;
 
+const COMMENT_TEMPLATE = `
+  <img
+    class="social__picture"
+    width="35"
+    height="35"
+  >
+  <p class="social__text"></p>
+`;
+
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const Steps = {
@@ -95,6 +104,7 @@ const Filters = {
 };
 
 export {
+  COMMENT_TEMPLATE,
   DEBOUNCE_DELAY,
   FILE_TYPES,
   ERROR_SHOW_TIME,
