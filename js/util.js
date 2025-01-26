@@ -45,19 +45,19 @@ const ignoreEscapeKeydown = (evt) => {
   }
 };
 
-const shuffleArray = (array, length = array.length) => {
-  const sourceArray = array.slice();
-  const resultArray = [];
+const shuffleArray = (values, length = values.length) => {
+  const valuesInOrder = values.slice();
+  const shuffledValues = [];
   let requiredLength = length;
 
-  while (sourceArray.length && requiredLength > 0) {
-    const randomIndex = getRandomIntegerInPositiveRange(0, sourceArray.length - 1);
+  while (valuesInOrder.length && requiredLength > 0) {
+    const randomIndex = getRandomIntegerInPositiveRange(0, valuesInOrder.length - 1);
 
-    resultArray.push(sourceArray.splice(randomIndex - 1, 1)[0]);
+    shuffledValues.push(valuesInOrder.splice(randomIndex - 1, 1)[0]);
     requiredLength--;
   }
 
-  return resultArray;
+  return shuffledValues;
 };
 
 export {
